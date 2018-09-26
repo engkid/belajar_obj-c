@@ -19,8 +19,8 @@ static NSString *loginUrlConstant = @"https://api.jikan.moe/v3";
     
     NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithCapacity:10];
     
-    [param setValue:@"asdasdasd" forKey:@"username"];
-    [param setValue:@"pass" forKey:@"password"];
+    [param setValue:username forKey:@"username"];
+    [param setValue:password forKey:@"password"];
     
     NSURLSession *session = [[NSURLSession alloc] init];
     

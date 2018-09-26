@@ -7,6 +7,7 @@
 //
 
 #import "SecondViewController.h"
+#import "LoginViewController.h"
 #import "LoadingView.h"
 #import "LoadingDelegate.h"
 
@@ -36,6 +37,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[LoginViewController sharedInstance] setupView];
     
 }
 

@@ -18,13 +18,27 @@
 
 @interface LoginViewController () <LoadingDelegate, NetworkServiceDelegate>
 
-@property (strong, nonatomic) UIView *qrView;
+//@property (strong, nonatomic) UIView *qrView;
 @property (strong, nonatomic) LoadingView *loading;
 @property (strong, nonatomic) NetworkServiceHelper *networkService;
+@property (weak, nonatomic) IBOutlet UITextField *userTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passTextField;
 
 @end
 
 @implementation LoginViewController
+
++(instancetype)sharedInstance {
+    static LoginViewController *sharedInstance = nil;
+    
+    static dispatch_once_t DispatchOnce;
+    
+    dispatch_once(&DispatchOnce, ^{
+        sharedInstance = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
+    });
+    
+    return sharedInstance;
+}
 
 - (instancetype)init
 {
@@ -44,13 +58,13 @@
     _loading.delegate = self;
     _networkService.delegate = self;
     
-    _qrView = [[UIView alloc] init];
-    _qrView.layer.masksToBounds = YES;
-    _qrView.layer.cornerRadius = 5;
-    _qrView.translatesAutoresizingMaskIntoConstraints = NO;
-    [_qrView setBackgroundColor:[UIColor redColor]];
-    
-    [self.view addSubview: _qrView];
+//    _qrView = [[UIView alloc] init];
+//    _qrView.layer.masksToBounds = YES;
+//    _qrView.layer.cornerRadius = 5;
+//    _qrView.translatesAutoresizingMaskIntoConstraints = NO;
+//    [_qrView setBackgroundColor:[UIColor redColor]];
+//
+//    [self.view addSubview: _qrView];
     
     [self setupView];
     
@@ -64,6 +78,21 @@
     
     SecondViewController *crCodeVC = [[SecondViewController alloc] init];
     [self.navigationController pushViewController:crCodeVC animated:YES];
+}
+
+- (IBAction)loginButtonTapped:(UIButton *)sender {
+    
+    [_networkService performLogin:self.userTextField.text withPassword:self.passTextField.text completion:^(NSData *response, NSError *error) {
+        
+        if (error) {
+            NSLog(@"%@", error);
+        }
+        
+        NSDictionary *responseDict =(NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:response];
+        
+        NSLog(@"%@", responseDict);
+        
+    }];
 }
 
 #pragma mark - loadingViewDelegate methods
@@ -86,21 +115,10 @@
 
 -(void)setupView {
     
-    UIView *childView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height, 50, 50)];
-    [childView setBackgroundColor:[UIColor blueColor]];
+//    NSArray *arrConst = @[[self.qrView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:100.0], [self.qrView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor], [self.qrView.heightAnchor constraintEqualToConstant:self.view.bounds.size.height / 2], [self.qrView.widthAnchor constraintEqualToConstant:self.view.bounds.size.width - 32]];
+//    
+//    [NSLayoutConstraint activateConstraints:arrConst];
     
-    [_qrView addSubview:childView];
-    
-    NSArray *arrConst = @[[self.qrView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:100.0], [self.qrView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor], [self.qrView.heightAnchor constraintEqualToConstant:self.view.bounds.size.height / 2], [self.qrView.widthAnchor constraintEqualToConstant:self.view.bounds.size.width - 32]];
-    
-    [NSLayoutConstraint activateConstraints:arrConst];
-    
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:@"image.png"];
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:image];
-    
-    imgView.frame = CGRectMake(0, 0, 100, 100);
-    
-    [self.qrView addSubview:imgView];
 }
 
 - (void)didReceiveFailWhileFetching {

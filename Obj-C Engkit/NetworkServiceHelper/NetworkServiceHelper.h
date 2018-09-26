@@ -13,6 +13,7 @@
 
 typedef void (^failureBlock)(NSError *error);
 typedef void (^dictionarySuccessBlock)(NSDictionary *responseDict);
+typedef void (^httpURLResponse)(NSHTTPURLResponse *urlResponse);
 
 @property (weak, nonatomic) id <NetworkServiceDelegate> delegate;
 

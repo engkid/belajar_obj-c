@@ -25,6 +25,7 @@ typedef void (^LoginCompletionBlock)(NSData* response, NSError* error);
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setHTTPMethod:@"POST"];
     [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPBody:[self httpBodyForParameters:param]];
     
     [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
@@ -46,6 +47,25 @@ typedef void (^LoginCompletionBlock)(NSData* response, NSError* error);
         completion(json, error);
         
     }] resume];
+}
+
+- (NSData *)httpBodyForParameters:(NSDictionary *)parameters {
+    NSMutableArray *parameterArray = [NSMutableArray array];
+    
+    [parameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
+        NSString *param = [NSString stringWithFormat:@"%@=%@", [self percentEscapeString:key], [self percentEscapeString:obj]];
+        [parameterArray addObject:param];
+    }];
+    
+    NSString *string = [parameterArray componentsJoinedByString:@"&"];
+    
+    return [string dataUsingEncoding:NSUTF8StringEncoding];
+    
+}
+
+- (NSString *)percentEscapeString:(NSString *)string {
+    NSCharacterSet *allowed = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~"];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
 }
 
 @end
