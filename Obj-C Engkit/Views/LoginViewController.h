@@ -10,4 +10,8 @@
 
 @interface LoginViewController : UIViewController
 
++(instancetype)sharedInstance;
+
+-(void)setupView;
+
 @end
