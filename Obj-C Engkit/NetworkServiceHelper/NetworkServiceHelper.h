@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NetworkServiceDelegate.h"
 
 @interface NetworkServiceHelper : NSObject
 
 typedef void (^failureBlock)(NSError *error);
 typedef void (^dictionarySuccessBlock)(NSDictionary *responseDict);
+
+@property (weak, nonatomic) id <NetworkServiceDelegate> delegate;
 
 -(void)performLogin:(NSString *) username withPassword: (NSString *) password completion: (void (^)(NSData* response, NSError* error)) completion;
 

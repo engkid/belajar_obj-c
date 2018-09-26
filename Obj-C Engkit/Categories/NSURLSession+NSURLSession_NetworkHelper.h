@@ -12,6 +12,7 @@
 
 @interface NSURLSession (NSURLSession_NetworkHelper)
 
+-(id)initWithURL: (NSString *) url andMethod: (NSString *) method;
 -(void)request: (NSString *) url withParameters: (NSDictionary *) param completionHandler:(void (^)(NSData* response, NSError* error)) completion;
 -(void)request:(NSString *)method withURL: (NSString *) url completionHandler: (void (^)(NSDictionary *responseDict, NSError *error)) completion;
 

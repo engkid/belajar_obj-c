@@ -47,8 +47,9 @@
 }
 
 -(void) wasAddedToScreen:(NSString*) sender {
-    NSString *user = self.userTextField.text;
-    NSString *pass = self.passTextField.text;
+    
+//    NSString *user = self.userTextField.text;
+//    NSString *pass = self.passTextField.text;
     
 //    [self.networkService performLogin:user withPassword:pass completion:^(NSData *response, NSError *error) {
 //

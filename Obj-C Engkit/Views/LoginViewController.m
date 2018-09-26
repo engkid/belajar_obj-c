@@ -16,7 +16,7 @@
 
 #import "NetworkServiceHelper.h"
 
-@interface LoginViewController () <LoadingDelegate>
+@interface LoginViewController () <LoadingDelegate, NetworkServiceDelegate>
 
 @property (strong, nonatomic) UIView *qrView;
 @property (strong, nonatomic) LoadingView *loading;
@@ -42,6 +42,7 @@
     _networkService = [[NetworkServiceHelper alloc] init];
     
     _loading.delegate = self;
+    _networkService.delegate = self;
     
     _qrView = [[UIView alloc] init];
     _qrView.layer.masksToBounds = YES;
@@ -53,8 +54,9 @@
     
     [self setupView];
     
-    
 }
+
+#pragma mark - buttonActions methods
 
 - (IBAction)nextButtonTapped:(UIButton *)sender {
     
@@ -62,8 +64,25 @@
     
     SecondViewController *crCodeVC = [[SecondViewController alloc] init];
     [self.navigationController pushViewController:crCodeVC animated:YES];
+}
+
+#pragma mark - loadingViewDelegate methods
+
+- (void)wasAddedToScreen:(NSString *)sender {
+    
+    [_networkService getAnimeList:^(NSDictionary *responseDict) {
+        NSLog(@"%@", responseDict);
+    } failureBlock:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+    NSLog(@"%@", sender);
+}
+
+- (void)wasRemovedFromScreen:(NSString *)sender {
     
 }
+
+#pragma mark - fileprivate functions
 
 -(void)setupView {
     
@@ -84,18 +103,12 @@
     [self.qrView addSubview:imgView];
 }
 
-- (void)wasAddedToScreen:(NSString *)sender {
+- (void)didReceiveFailWhileFetching {
     
-    [_networkService getAnimeList:^(NSDictionary *responseDict) {
-        NSLog(@"%@", responseDict);
-    } failureBlock:^(NSError *error) {
-        NSLog(@"%@", error);
-    }];
-    NSLog(@"%@", sender);
 }
 
-- (void)wasRemovedFromScreen:(NSString *)sender {
-    
+- (void)didReceiveSuccessWhileFetching {
+    NSLog(@"succeed retrieve data");
 }
 
 @end

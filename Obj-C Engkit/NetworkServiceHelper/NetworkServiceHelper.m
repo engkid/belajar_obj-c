@@ -26,6 +26,10 @@ static NSString *loginUrlConstant = @"https://api.jikan.moe/v3";
     
     [session request:k_LOGIN_URL withParameters:param completionHandler:^(NSData *response, NSError *error) {
         
+        if (!error) {
+            [self.delegate didReceiveSuccessWhileFetching];
+        }
+        
         completion(response, error);
         
     }];
@@ -43,6 +47,7 @@ static NSString *loginUrlConstant = @"https://api.jikan.moe/v3";
         }
         
         successBlock(responseDict);
+        [self.delegate didReceiveSuccessWhileFetching];
         
     }];
     

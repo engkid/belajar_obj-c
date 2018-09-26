@@ -7,15 +7,45 @@
 //
 
 #import "SecondViewController.h"
+#import "LoadingView.h"
+#import "LoadingDelegate.h"
 
-@interface SecondViewController ()
+@interface SecondViewController () <LoadingDelegate>
+
+@property (strong, nonatomic) LoadingView *loading;
 
 @end
 
 @implementation SecondViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _loading = [[LoadingView alloc] init];
+        _loading.delegate = self;
+    }
+    return self;
+}
+
+#pragma mark - buttonAction methods
+
+- (IBAction)delegateTapped:(UIButton *)sender {
+    [_loading show];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+}
+
+#pragma mark - loadingDelegate methods
+
+- (void)wasAddedToScreen:(NSString *)sender {
+    
+}
+
+- (void)wasRemovedFromScreen:(NSString *)sender {
     
 }
 

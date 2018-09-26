@@ -12,6 +12,15 @@
 
 typedef void (^LoginCompletionBlock)(NSData* response, NSError* error);
 
+-(id)initWithURL: (NSString *) url andMethod: (NSString *) method {
+    
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];
+    [req setHTTPMethod:method];
+    [req setURL:[NSURL URLWithString:url]];
+    
+    return self;
+}
+
 -(void)request: (NSString *) url withParameters: (NSDictionary *) param completionHandler: (void (^)(NSData* response, NSError* error)) completion {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setHTTPMethod:@"POST"];

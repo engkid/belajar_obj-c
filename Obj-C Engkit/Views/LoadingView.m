@@ -16,7 +16,7 @@
 
 @implementation LoadingView
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     if (self) {
@@ -26,7 +26,7 @@
     return nil;
 }
 
-- (id)initWithOwner: (UIViewController*) viewController {
+- (instancetype)initWithOwner: (UIViewController*) viewController {
     
     self = [self init];
     
