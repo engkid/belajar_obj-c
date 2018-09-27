@@ -24,11 +24,15 @@ static NSString *loginUrlConstant = @"https://api.jikan.moe/v3";
     
     NSURLSession *session = [[NSURLSession alloc] init];
     
+    __weak typeof (self)weakSelf = self; //avoid retain cycle that can causing memory leak
+    
     [session request:k_LOGIN_URL withParameters:param completionHandler:^(NSData *response, NSError *error) {
         
+        __strong typeof (weakSelf)strongSelf = weakSelf; //avoid retain cycle that can causing memory leak
+        
         if (!error) {
-            if ([self.delegate respondsToSelector:@selector(didReceiveSuccessWhileFetching)]) {
-                [self.delegate didReceiveSuccessWhileFetching];
+            if ([strongSelf.delegate respondsToSelector:@selector(didReceiveSuccessWhileFetching)]) {
+                [strongSelf.delegate didReceiveSuccessWhileFetching];
             }
             
 //            [self.delegate didReceiveSuccessWhileFetching];
@@ -44,15 +48,19 @@ static NSString *loginUrlConstant = @"https://api.jikan.moe/v3";
     
     NSURLSession *session = [[NSURLSession alloc] init];
     
+    __weak typeof(self)weakSelf = self; //avoid retain cycle that can causing memory leak
+    
     [session request:@"GET" withURL:k_LOGIN_URL completionHandler:^(NSDictionary *responseDict, NSError *error) {
+        
+        __strong typeof(weakSelf)strongSelf = weakSelf; //avoid retain cycle that can causing memory leak
         
         if (error) {
             failureBlock(error);
         }
         
         successBlock(responseDict);
-        if ([self.delegate respondsToSelector:@selector(didReceiveSuccessWhileFetching)]) {
-            [self.delegate didReceiveSuccessWhileFetching];
+        if ([strongSelf.delegate respondsToSelector:@selector(didReceiveSuccessWhileFetching)]) {
+            [strongSelf.delegate didReceiveSuccessWhileFetching];
         }
         
 //        [self.delegate didReceiveSuccessWhileFetching];
